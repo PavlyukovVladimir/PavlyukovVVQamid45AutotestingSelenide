@@ -24,7 +24,7 @@ class AppCardDeliveryTest {
     void setUp() {
         Configuration.browser = "chrome";
         Configuration.browserVersion = "105.0.5195.125";
-        Configuration.headless = false;  // true запускает браузер в невидимом режиме
+        Configuration.headless = true;  // true запускает браузер в невидимом режиме
         Configuration.baseUrl = baseUrl;
         Configuration.holdBrowserOpen = true;  // false не оставляет браузер открытым по завершению теста
         Selenide.open("");
