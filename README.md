@@ -113,7 +113,7 @@ P.S. Стоит отметить, что перед автоматизацией
 # Багрепорты
 
 * [Админ центр Гатчина вызывает ошибку]()
-* [Админ центр Курган вызывает ошибку]()
+* [Админ центр Красногорск вызывает ошибку]()
 * [Ё в имени вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/1)
 * [ё в имени вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/2)
 * [Имя "-" не вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/3)

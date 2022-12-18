@@ -2,12 +2,13 @@ package ru.netology;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.junit5.ScreenShooterExtension;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.platform.commons.JUnitException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,8 @@ import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppCardDeliveryTest {
+@ExtendWith({ScreenShooterExtension.class})
+public class AppCardDeliveryTest {
     private final String baseUrl = "http://0.0.0.0:9999";
     private OrderCardDeliveryPage page;
 
@@ -27,15 +29,16 @@ class AppCardDeliveryTest {
         Configuration.headless = true;  // true запускает браузер в невидимом режиме
         Configuration.baseUrl = baseUrl;
         Configuration.holdBrowserOpen = true;  // false не оставляет браузер открытым по завершению теста
+        Configuration.reportsFolder = "build/reports/tests/test/screenshoots";
         Selenide.open("");
         page = new OrderCardDeliveryPage();
     }
 
-    @AfterEach
-    void tearDown() {
-        Selenide.webdriver().driver().getWebDriver().close();
-        Selenide.webdriver().driver().getWebDriver().quit();
-    }
+//    @AfterEach
+//    void tearDown() {
+//        Selenide.webdriver().driver().getWebDriver().close();
+//        Selenide.webdriver().driver().getWebDriver().quit();
+//    }
 
     @DisplayName("Проверка административных центров.")
     @ParameterizedTest(name = "{0}")
