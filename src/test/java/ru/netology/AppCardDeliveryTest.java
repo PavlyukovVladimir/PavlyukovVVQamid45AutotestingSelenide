@@ -5,12 +5,11 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.platform.commons.JUnitException;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,7 +25,7 @@ public class AppCardDeliveryTest {
     void setUp() {
         Configuration.browser = "chrome";
         Configuration.browserVersion = "105.0.5195.125";
-        Configuration.headless = true;  // true запускает браузер в невидимом режиме
+        Configuration.headless = false;  // true запускает браузер в невидимом режиме
         Configuration.baseUrl = baseUrl;
         Configuration.holdBrowserOpen = true;  // false не оставляет браузер открытым по завершению теста
         Configuration.reportsFolder = "build/reports/tests/test/screenshoots";
@@ -353,5 +352,45 @@ public class AppCardDeliveryTest {
         page.fillPhone("+79781111111");
         page.clickSubmit();
         assertTrue(page.isInvalidCheckBox());
+    }
+
+    @DisplayName("Выбор даты на 7 дней позже текущей через виджет календаря.")
+    @Test
+    void calendarWidgetTest() throws ParseException {
+        page.fillCity("Москва");
+        Calendar calendar = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        String dateStr = formatter.format(calendar.getTime());
+        page.fillDateByWidget(dateStr);
+        String actualDate = page.getDate();
+        assertEquals(dateStr, actualDate);
+        page.fillName("Иван");
+        page.fillPhone("+79781111111");
+        page.clickCheckBox();
+        page.clickSubmit();
+        String expectedResponseMessage = "Встреча успешно забронирована на " + dateStr;
+        String actualResponseMessage = page.notificationMessage();
+        assertEquals(expectedResponseMessage, actualResponseMessage);
+    }
+
+    @DisplayName("Ввод города с помощью выпадающего списка.")
+    @Test
+    void popupListTest() throws ParseException {
+        page.fillCityByPopupList("Курган");
+        Calendar calendar = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        String dateStr = formatter.format(calendar.getTime());
+        page.fillDateByWidget(dateStr);
+        String actualDate = page.getDate();
+        assertEquals(dateStr, actualDate);
+        page.fillName("Иван");
+        page.fillPhone("+79781111111");
+        page.clickCheckBox();
+        page.clickSubmit();
+        String expectedResponseMessage = "Встреча успешно забронирована на " + dateStr;
+        String actualResponseMessage = page.notificationMessage();
+        assertEquals(expectedResponseMessage, actualResponseMessage);
     }
 }
