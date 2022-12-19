@@ -32,20 +32,21 @@ public class OrderCardDeliveryPage {
     private SelenideElement inputInvalidElement = $(".input_invalid");
 
     public void fillCity(@NotNull String city) {
-        cityElement.$("input").setValue(city);
+        cityElement.$("input").shouldBe(Condition.visible).setValue(city);
     }
+
     public void fillCityByPopupList(@NotNull String city) {
         // Ввод первых 2х букв
-        cityElement.$("input").setValue(city.substring(0,2));
+        cityElement.$("input").shouldBe(Condition.visible).setValue(city.substring(0, 2));
         // список выпавших элементов
         ElementsCollection ec = $$(".menu-item__control");
         SelenideElement findedControlCityElement = null;
-        for(SelenideElement controlCityElement:ec){
+        for (SelenideElement controlCityElement : ec) {
             String cityText = controlCityElement.getText();
-            if(cityText.equals(city)) {
+            if (cityText.equals(city)) {
                 // проверка, что не задублирован элемент
                 assertNull(findedControlCityElement);
-                findedControlCityElement=controlCityElement;
+                findedControlCityElement = controlCityElement;
             }
         }
         // проверка, что нужный найден
@@ -56,7 +57,7 @@ public class OrderCardDeliveryPage {
 
     public void clearDate() {
         dateElement.$("input").click();
-        Actions actions = new Actions(dateElement.$("input").getWrappedDriver());
+        Actions actions = new Actions(dateElement.$("input").shouldBe(Condition.visible).getWrappedDriver());
         actions
                 .keyDown(Keys.CONTROL)
                 .sendKeys("a")
@@ -68,7 +69,7 @@ public class OrderCardDeliveryPage {
 
     public void fillDate(@NotNull String date) {
         clearDate();
-        dateElement.$("input").setValue(date);
+        dateElement.$("input").shouldBe(Condition.visible).setValue(date);
     }
 
     public String getDate() {
@@ -84,7 +85,7 @@ public class OrderCardDeliveryPage {
         Calendar targetCalendar = Calendar.getInstance();
         targetCalendar.setTime(formatter.parse(dateStr));
 
-        dateElement.$("input").click();
+        dateElement.$("input").shouldBe(Condition.visible).click();
 
         LocalDate calendarDate = LocalDate.now().plusDays(3);
 
@@ -100,14 +101,14 @@ public class OrderCardDeliveryPage {
                 minCalendar.add(Calendar.YEAR, 1);
 
                 String nameDateStr = calendarDate.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.forLanguageTag("ru"));
-                nameDateStr = nameDateStr.substring(0,1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
+                nameDateStr = nameDateStr.substring(0, 1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
                 nameDateStr += " " + calendarDate.getYear();
 
 //                System.out.println(nameDateStr);
 
                 calendarName.shouldBe(Condition.text(nameDateStr));
             }
-        }else{
+        } else {
             for (int i = minDateYear; targetYear < i; i--) {
                 SelenideElement yearBackArrow = $("[data-step=\"-12\"]");
                 yearBackArrow.click();
@@ -116,7 +117,7 @@ public class OrderCardDeliveryPage {
                 minCalendar.add(Calendar.YEAR, -1);
 
                 String nameDateStr = calendarDate.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.forLanguageTag("ru"));
-                nameDateStr = nameDateStr.substring(0,1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
+                nameDateStr = nameDateStr.substring(0, 1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
                 nameDateStr += " " + calendarDate.getYear();
 
 //                System.out.println(nameDateStr);
@@ -138,14 +139,14 @@ public class OrderCardDeliveryPage {
                 minCalendar.add(Calendar.MONTH, 1);
 
                 String nameDateStr = calendarDate.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.forLanguageTag("ru"));
-                nameDateStr = nameDateStr.substring(0,1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
+                nameDateStr = nameDateStr.substring(0, 1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
                 nameDateStr += " " + calendarDate.getYear();
 
 //                System.out.println(nameDateStr);
 
                 calendarName.shouldBe(Condition.text(nameDateStr));
             }
-        }else{
+        } else {
             for (int i = minDateMonth; targetMonth < i; i--) {
                 SelenideElement monthBackArrow = $("[data-step=\"-1\"]");
                 monthBackArrow.click();
@@ -155,7 +156,7 @@ public class OrderCardDeliveryPage {
                 minCalendar.add(Calendar.MONTH, -1);
 
                 String nameDateStr = calendarDate.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.forLanguageTag("ru"));
-                nameDateStr = nameDateStr.substring(0,1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
+                nameDateStr = nameDateStr.substring(0, 1).toUpperCase() + nameDateStr.substring(1).toLowerCase();
                 nameDateStr += " " + calendarDate.getYear();
 
 //                System.out.println(nameDateStr);
@@ -176,16 +177,16 @@ public class OrderCardDeliveryPage {
     }
 
     public void fillName(@NotNull String name) {
-        nameElement.$("input").setValue(name);
+        nameElement.$("input").shouldBe(Condition.visible).setValue(name);
     }
 
     public void fillPhone(@NotNull String phone) {
-        phoneElement.$("input").setValue(phone);
+        phoneElement.$("input").shouldBe(Condition.visible).setValue(phone);
     }
 
     public void clickCheckBox() {
 //        agreementElement.$(".checkbox__box").click();
-        agreementElement.click();
+        agreementElement.shouldBe(Condition.visible).click();
     }
 
     public boolean isInvalidCheckBox() {
@@ -194,7 +195,7 @@ public class OrderCardDeliveryPage {
     }
 
     public void clickSubmit() {
-        submitElement.click();
+        submitElement.shouldBe(Condition.visible).click();
     }
 
     public String notificationMessage() {

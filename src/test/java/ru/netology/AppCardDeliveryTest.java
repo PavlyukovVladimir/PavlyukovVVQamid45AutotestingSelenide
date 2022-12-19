@@ -25,7 +25,7 @@ public class AppCardDeliveryTest {
     void setUp() {
         Configuration.browser = "chrome";
         Configuration.browserVersion = "105.0.5195.125";
-        Configuration.headless = false;  // true запускает браузер в невидимом режиме
+        Configuration.headless = true;  // true запускает браузер в невидимом режиме
         Configuration.baseUrl = baseUrl;
         Configuration.holdBrowserOpen = true;  // false не оставляет браузер открытым по завершению теста
         Configuration.reportsFolder = "build/reports/tests/test/screenshoots";
@@ -44,16 +44,6 @@ public class AppCardDeliveryTest {
     @CsvFileSource(files = "src/test/resources/CapitalsRF.csv")
     void allValidCapitalsTest(String capital) {
         page.fillCity(capital);
-        page.clickSubmit();
-        String expectedSubText = "Поле обязательно для заполнения";
-        String actualSubText = page.getInvalidMessage();;
-        assertEquals(expectedSubText, actualSubText);
-    }
-
-    @DisplayName("Отправка формы.")
-    @Test
-    void positiveWithMinDateTest() {
-        page.fillCity("Москва");
         Calendar calendar = new GregorianCalendar();
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         calendar.add(Calendar.DAY_OF_MONTH, 3);
@@ -71,6 +61,14 @@ public class AppCardDeliveryTest {
     @DisplayName("Не заполнено поле город.")
     @Test
     void negativeEmptyCityTest() {
+        Calendar calendar = new GregorianCalendar();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        String dateStr = formatter.format(calendar.getTime());
+        page.fillDate(dateStr);
+        page.fillName("Иван");
+        page.fillPhone("+79781111111");
+        page.clickCheckBox();
         page.clickSubmit();
         String expectedSubText = "Поле обязательно для заполнения";
         String actualSubText = page.getInvalidMessage();
@@ -81,6 +79,14 @@ public class AppCardDeliveryTest {
     @Test
     void negativeNotAdministrativeCenterCityTest() {
         page.fillCity("Оха");
+        Calendar calendar = new GregorianCalendar();
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        String dateStr = formatter.format(calendar.getTime());
+        page.fillDate(dateStr);
+        page.fillName("Иван");
+        page.fillPhone("+79781111111");
+        page.clickCheckBox();
         page.clickSubmit();
         String expectedSubText = "Доставка в выбранный город недоступна";
         String actualSubText = page.getInvalidMessage();
@@ -96,6 +102,9 @@ public class AppCardDeliveryTest {
         calendar.add(Calendar.DAY_OF_MONTH, 2);
         String dateStr = formatter.format(calendar.getTime());
         page.fillDate(dateStr);
+        page.fillName("Иван");
+        page.fillPhone("+79781111111");
+        page.clickCheckBox();
         page.clickSubmit();
         String expectedSubText = "Заказ на выбранную дату невозможен";
         String actualSubText = page.getInvalidMessage();
@@ -217,8 +226,11 @@ public class AppCardDeliveryTest {
         page.fillDate(dateStr);
         page.fillName("-");
         page.fillPhone("+79781111111");
+        page.clickCheckBox();
         page.clickSubmit();
-        assertFalse(page.isInvalidCheckBox(), "The wrong name was allowed because the agreement data shows an error.");
+        String expectedSubText = "В имени кроме тире должны быть буквы.";
+        String actualSubText = page.getInvalidMessage();
+        assertEquals(expectedSubText, actualSubText);
     }
 
     @DisplayName("Имя начинающееся на \"-\"")
@@ -232,8 +244,11 @@ public class AppCardDeliveryTest {
         page.fillDate(dateStr);
         page.fillName("-Мандрагора");
         page.fillPhone("+79781111111");
+        page.clickCheckBox();
         page.clickSubmit();
-        assertFalse(page.isInvalidCheckBox(), "The wrong name was allowed because the agreement data shows an error.");
+        String expectedSubText = "Имя не может начинаться на тире.";
+        String actualSubText = page.getInvalidMessage();
+        assertEquals(expectedSubText, actualSubText);
     }
 
     @DisplayName("Имя заканчивающееся на \"-\"")
@@ -247,8 +262,11 @@ public class AppCardDeliveryTest {
         page.fillDate(dateStr);
         page.fillName("Пенелопа Армани-");
         page.fillPhone("+79781111111");
+        page.clickCheckBox();
         page.clickSubmit();
-        assertFalse(page.isInvalidCheckBox(), "The wrong name was allowed because the agreement data shows an error.");
+        String expectedSubText = "Имя не может заканчиваться на тире.";
+        String actualSubText = page.getInvalidMessage();
+        assertEquals(expectedSubText, actualSubText);
     }
 
     @DisplayName("Не заполненное имя")
@@ -261,8 +279,8 @@ public class AppCardDeliveryTest {
         String dateStr = formatter.format(calendar.getTime());
         page.fillDate(dateStr);
         page.fillPhone("+79781111111");
+        page.clickCheckBox();
         page.clickSubmit();
-        assertFalse(page.isInvalidCheckBox(), "The wrong name was allowed because the agreement data shows an error.");
         String expectedSubText = "Поле обязательно для заполнения";
         String actualSubText = page.getInvalidMessage();
         assertEquals(expectedSubText, actualSubText);

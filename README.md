@@ -112,10 +112,10 @@ P.S. Стоит отметить, что перед автоматизацией
 
 # Багрепорты
 
-* [Админ центр Гатчина вызывает ошибку]()
-* [Админ центр Красногорск вызывает ошибку]()
-* [Ё в имени вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/1)
-* [ё в имени вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/2)
-* [Имя "-" не вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/3)
-* [Имя с "-" в конце не вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/4)
-* [Имя с "-" в начале не вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingWebI/issues/5)
+* [Ошибка в сообщении об ошибке, когда поле имя неверно](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingSelenide/issues/7)
+* [Админ центры Гатчина и Красногорск вызывают ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingSelenide/issues/6)
+* [Ё в имени вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingSelenide/issues/2)
+* [ё в имени вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingSelenide/issues/1)
+* [Имя "-" не вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingSelenide/issues/5)
+* [Имя с "-" в конце не вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingSelenide/issues/4)
+* [Имя с "-" в начале не вызывает ошибку](https://github.com/PavlyukovVladimir/PavlyukovVVQamid45AutotestingSelenide/issues/3)
