@@ -33,6 +33,7 @@ public class OrderCardDeliveryPage {
 
     public void fillCity(@NotNull String city) {
         cityElement.$("input").shouldBe(Condition.visible).setValue(city);
+        cityElement.$("input").shouldBe(Condition.visible).pressEscape();
     }
 
     public void fillCityByPopupList(@NotNull String city) {
