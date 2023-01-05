@@ -22,62 +22,56 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class OrderCardDeliveryPage {
-    private SelenideElement cityElement = $("[data-test-id=city]");
-    private SelenideElement dateElement = $("[data-test-id=date]");
-    private SelenideElement nameElement = $("[data-test-id=name]");
-    private SelenideElement phoneElement = $("[data-test-id=phone]");
+    private DataHelper.CardOrderInputInfo cardOrderInputInfo;
+    private SelenideElement cityElement = $("[data-test-id=city] input");
+    private SelenideElement citySubElement = $("[data-test-id=city] .input__sub");
+    private SelenideElement dateElement = $("[data-test-id=date] input");
+    private SelenideElement dateSubElement = $("[data-test-id=date] .input__sub");
+    private SelenideElement nameElement = $("[data-test-id=name] input");
+    private SelenideElement nameSubElement = $("[data-test-id=name] .input__sub");
+    private SelenideElement phoneElement = $("[data-test-id=phone] input");
+    private SelenideElement phoneSubElement = $("[data-test-id=phone] .input__sub");
     private SelenideElement agreementElement = $("[data-test-id=agreement]");
     private SelenideElement submitElement = $("button.button");
     private SelenideElement notificationElement = $("[data-test-id=notification]");
-    private SelenideElement inputInvalidElement = $(".input_invalid");
 
-    public void fillCity(@NotNull String city) {
-        cityElement.$("input").shouldBe(Condition.visible).setValue(city);
-        cityElement.$("input").shouldBe(Condition.visible).pressEscape();
+
+    public OrderCardDeliveryPage fillCity(@NotNull String city) {
+        cityElement.shouldBe(Condition.visible).setValue(city);
+        cityElement.shouldBe(Condition.visible).pressEscape();
+        return this;
     }
 
-    public void fillCityByPopupList(@NotNull String city) {
+    public OrderCardDeliveryPage fillCityByPopupList(@NotNull String city) {
         // Ввод первых 2х букв
-        cityElement.$("input").shouldBe(Condition.visible).setValue(city.substring(0, 2));
+        cityElement.shouldBe(Condition.visible).setValue(city.substring(0, 2));
         // список выпавших элементов
         ElementsCollection ec = $$(".menu-item__control");
-        SelenideElement findedControlCityElement = null;
-        for (SelenideElement controlCityElement : ec) {
-            String cityText = controlCityElement.getText();
-            if (cityText.equals(city)) {
-                // проверка, что не задублирован элемент
-                assertNull(findedControlCityElement);
-                findedControlCityElement = controlCityElement;
-            }
-        }
-        // проверка, что нужный найден
-        assertNotNull(findedControlCityElement);
-        findedControlCityElement.click();
-        assertEquals(city, cityElement.$("input").getValue());
+        SelenideElement foundControlCityElement = ec.findBy(Condition.text(city));
+        foundControlCityElement.click();
+        cityElement.shouldHave(Condition.value(city));
+        return this;
     }
 
-    public void clearDate() {
-        dateElement.$("input").click();
-        Actions actions = new Actions(dateElement.$("input").shouldBe(Condition.visible).getWrappedDriver());
+    public OrderCardDeliveryPage clearDate() {
+        dateElement.click();
+        Actions actions = new Actions(dateElement.shouldBe(Condition.visible).getWrappedDriver());
         actions
                 .keyDown(Keys.CONTROL)
                 .sendKeys("a")
                 .keyUp(Keys.CONTROL)
-                .keyDown(Keys.DELETE)
-                .keyUp(Keys.DELETE)
+                .sendKeys(Keys.DELETE)
                 .perform();
+        return this;
     }
 
-    public void fillDate(@NotNull String date) {
+    public OrderCardDeliveryPage fillDate(@NotNull String date) {
         clearDate();
-        dateElement.$("input").shouldBe(Condition.visible).setValue(date);
+        dateElement.shouldBe(Condition.visible).setValue(date);
+        return this;
     }
 
-    public String getDate() {
-        return dateElement.$("input").getValue();
-    }
-
-    public void fillDateByWidget(@NotNull String dateStr) throws ParseException {
+    public OrderCardDeliveryPage fillDateByWidget(@NotNull String dateStr) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
         Calendar minCalendar = Calendar.getInstance();
@@ -86,7 +80,7 @@ public class OrderCardDeliveryPage {
         Calendar targetCalendar = Calendar.getInstance();
         targetCalendar.setTime(formatter.parse(dateStr));
 
-        dateElement.$("input").shouldBe(Condition.visible).click();
+        dateElement.shouldBe(Condition.visible).click();
 
         LocalDate calendarDate = LocalDate.now().plusDays(3);
 
@@ -174,45 +168,92 @@ public class OrderCardDeliveryPage {
 
         $(".calendar__day[data-day=\"" + targetCalendar.getTimeInMillis() + "\"]").click();
 
-        dateElement.$("input").should(Condition.value(dateStr));
+        dateElement.should(Condition.value(dateStr));
+        return this;
     }
 
-    public void fillName(@NotNull String name) {
-        nameElement.$("input").shouldBe(Condition.visible).setValue(name);
+    public OrderCardDeliveryPage fillName(@NotNull String name) {
+        nameElement.shouldBe(Condition.visible).setValue(name);
+        return this;
     }
 
-    public void fillPhone(@NotNull String phone) {
-        phoneElement.$("input").shouldBe(Condition.visible).setValue(phone);
+    public OrderCardDeliveryPage fillPhone(@NotNull String phone) {
+        phoneElement.shouldBe(Condition.visible).setValue(phone);
+        return this;
     }
 
-    public void clickCheckBox() {
-//        agreementElement.$(".checkbox__box").click();
+    public OrderCardDeliveryPage clickCheckBox() {
         agreementElement.shouldBe(Condition.visible).click();
+        return this;
     }
 
-    public boolean isInvalidCheckBox() {
-        boolean check = agreementElement.is(Condition.cssClass("input_invalid"));
-        return check;
-    }
-
-    public void clickSubmit() {
+    public OrderCardDeliveryPage clickSubmit() {
         submitElement.shouldBe(Condition.visible).click();
+        return this;
     }
 
-    public String notificationMessage() {
+    public void checkNotificationMessage(@NotNull String dateStr) {
         notificationElement
                 .$(".notification__title")
                 .shouldBe(Condition.visible, Duration.ofSeconds(15))
                 .shouldBe(Condition.text("Успешно!"));
-        return notificationElement.$(".notification__content").getText();
+        notificationElement
+                .$(".notification__content")
+                .shouldBe(Condition.text("Встреча успешно забронирована на " + dateStr));
     }
 
-    public String getInvalidMessage() {
-        return inputInvalidElement.$(".input__sub").getText();
+    public void checkNotificationMessage() {
+        assertNotNull(cardOrderInputInfo);
+        assertNotNull(cardOrderInputInfo.getDate());
+
+        notificationElement
+                .$(".notification__title")
+                .shouldBe(Condition.visible, Duration.ofSeconds(15))
+                .shouldBe(Condition.text("Успешно!"));
+        notificationElement
+                .$(".notification__content")
+                .shouldBe(Condition.text("Встреча успешно забронирована на " + cardOrderInputInfo.getDate()));
     }
 
-//    @Test
-//    public void test() throws ParseException {
-//        fillDateByWidget("25.12.2022");
-//    }
+    public OrderCardDeliveryPage fillForm(@NotNull DataHelper.CardOrderInputInfo info) {
+        cardOrderInputInfo = info;
+
+        String city = cardOrderInputInfo.getCity();
+        if (city != null) fillCity(city);
+
+        String dateStr = cardOrderInputInfo.getDate();
+        if (dateStr != null) fillDate(dateStr);
+
+        String name = cardOrderInputInfo.getName();
+        if (name != null) fillName(name);
+
+        String phone = cardOrderInputInfo.getPhone();
+        if (phone != null) fillPhone(phone);
+
+        boolean isAgreement = cardOrderInputInfo.getIsAgreement();
+        if (isAgreement) clickCheckBox();
+
+        return this;
+    }
+
+    void checkCitySubText(@NotNull String text) {
+        citySubElement.shouldHave(Condition.text(text));
+    }
+
+    void checkDateSubText(@NotNull String text) {
+        dateSubElement.shouldHave(Condition.text(text));
+    }
+
+    void checkNameSubText(@NotNull String text) {
+        nameSubElement.shouldHave(Condition.text(text));
+    }
+
+    void checkPhoneSubText(@NotNull String text) {
+        phoneSubElement.shouldHave(Condition.text(text));
+    }
+
+    void checkAgreementInvalidIndication() {
+        agreementElement.shouldHave(Condition.cssClass("input_invalid"));
+    }
+
 }

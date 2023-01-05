@@ -2,6 +2,10 @@ plugins {
     id 'java'
 }
 
+ext {
+    lombokVersion = '1.18.24'
+}
+
 group 'ru.netology'
 version '1.0-SNAPSHOT'
 
@@ -18,8 +22,14 @@ dependencies {
     testImplementation 'org.slf4j:slf4j-simple:2.0.5'
     testImplementation 'org.jetbrains:annotations:23.1.0'
     testImplementation 'com.codeborne:selenide:6.10.3'
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
 test {
     useJUnitPlatform()
+    systemProperty 'selenide.headless', System.getProperty('selenide.headless')
 }

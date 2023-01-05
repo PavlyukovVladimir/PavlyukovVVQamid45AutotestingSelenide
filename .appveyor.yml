@@ -13,7 +13,8 @@ install:
   - java -jar ./artifacts/app-card-delivery.jar &
 
 test_script:
-  - ./gradlew test --info  # запускаем тест, флаг --info позволяет выводить больше информации
+  - ./gradlew test -Dselenide.headless=true --info  # запускаем тест, флаг --info позволяет выводить больше информации
+                                                    # -Dselenide.headless=true запустит браузер в невидимом режиме
 on_finish:
   - 7z a build/reports.zip build/reports/
   - appveyor PushArtifact build/reports.zip
