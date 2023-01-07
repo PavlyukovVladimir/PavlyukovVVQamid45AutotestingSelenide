@@ -54,14 +54,9 @@ public class OrderCardDeliveryPage {
     }
 
     public OrderCardDeliveryPage clearDate() {
-        dateElement.click();
-        Actions actions = new Actions(dateElement.shouldBe(Condition.visible).getWrappedDriver());
-        actions
-                .keyDown(Keys.CONTROL)
-                .sendKeys("a")
-                .keyUp(Keys.CONTROL)
-                .sendKeys(Keys.DELETE)
-                .perform();
+        dateElement
+                .doubleClick()
+                .sendKeys(Keys.DELETE);
         return this;
     }
 

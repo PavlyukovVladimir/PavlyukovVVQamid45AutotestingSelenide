@@ -42,7 +42,6 @@ public class AppCardDeliveryTest {
     @DisplayName("Позитивный тест, города подставляются случайно")
     @Test
     void mainPositiveTest() {
-        String dateStr = DataHelper.nowWithDaysShift(3);
         page
                 .fillForm(DataHelper.getValidCardOrderInputInfo())
                 .clickSubmit()
